@@ -8,6 +8,13 @@ data:
 
     echo "Getting authorization token for CodeArtifact"
 
+    NAMESPACES={{ join " " (required "targeNamespaces is required" .Values.targeNamespaces) }}
+
+    if [ -z "$NAMESPACES" ]; then
+      echo "No namespaces provided"
+      exit 1
+    fi
+
     TOKEN=$(
       aws codeartifact get-authorization-token \
         --domain {{ required "codeartifact.domain is required" .Values.codeartifact.domain }} \
@@ -16,8 +23,6 @@ data:
         --query authorizationToken \
         --output text
     )
-
-    NAMESPACES={{ join " " (required "targeNamespaces is required" .Values.targeNamespaces) }}
 
     for ns in $NAMESPACES; do
       echo "Updating secret in namespace: $ns"
