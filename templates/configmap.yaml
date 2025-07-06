@@ -6,6 +6,8 @@ data:
   update-codeartifact-secret.sh: |
     #!/bin/sh -e
 
+    echo "Getting authorization token for CodeArtifact"
+
     TOKEN=$(
       aws codeartifact get-authorization-token \
         --domain {{ .Values.codeartifact.domain }} \
@@ -15,6 +17,8 @@ data:
         --output text
     )
 
+    NAMESPACES=({{ join " " .Values.namespaces }})
+
     for ns in $NAMESPACES; do
       echo "Updating secret in namespace: $ns"
 
@@ -22,4 +26,6 @@ data:
       kubectl create secret generic {{ .Values.secretName }} \
         --from-literal=CODEARTIFACT_TOKEN=$TOKEN \
         --dry-run=client -o yaml | kubectl apply -f - -n $ns
+
+      echo "Secret updated in namespace: $ns"
     done
