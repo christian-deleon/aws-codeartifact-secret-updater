@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: update-codeartifact-secret
+  name: {{ .Release.Name }}-script
 data:
   update-codeartifact-secret.sh: |
     #!/bin/sh -e
@@ -10,14 +10,14 @@ data:
 
     TOKEN=$(
       aws codeartifact get-authorization-token \
-        --domain {{ .Values.codeartifact.domain }} \
-        --domain-owner {{ .Values.aws.accountId }} \
-        --region {{ .Values.aws.region }} \
+        --domain {{ required "codeartifact.domain is required" .Values.codeartifact.domain }} \
+        --domain-owner {{ required "aws.accountId is required" .Values.aws.accountId }} \
+        --region {{ required "aws.region is required" .Values.aws.region }} \
         --query authorizationToken \
         --output text
     )
 
-    NAMESPACES={{ join " " .Values.namespaces }}
+    NAMESPACES={{ join " " (required "targeNamespaces is required" .Values.targeNamespaces) }}
 
     for ns in $NAMESPACES; do
       echo "Updating secret in namespace: $ns"
