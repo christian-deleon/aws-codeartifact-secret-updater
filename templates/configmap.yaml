@@ -10,6 +10,7 @@ data:
       aws codeartifact get-authorization-token \
         --domain {{ .Values.codeartifact.domain }} \
         --domain-owner {{ .Values.aws.accountId }} \
+        --region {{ .Values.aws.region }} \
         --query authorizationToken \
         --output text
     )
