@@ -29,7 +29,7 @@ data:
 
       # Create or update the secret
       kubectl create secret generic {{ .Values.secretName }} \
-        --from-literal=CODEARTIFACT_TOKEN=$TOKEN \
+        --from-literal=token=$TOKEN \
         --dry-run=client -o yaml | kubectl apply -f - -n $ns
 
       if [ $? -eq 0 ]; then
