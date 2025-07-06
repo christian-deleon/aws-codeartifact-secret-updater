@@ -28,3 +28,12 @@ spec:
                       name: aws-credentials
                       key: AWS_SECRET_ACCESS_KEY
               {{- end }}
+              volumeMounts:
+                - name: update-codeartifact-secret
+                  mountPath: /app/update-codeartifact-secret.sh
+                  subPath: update-codeartifact-secret.sh
+          volumes:
+            - name: update-codeartifact-secret
+              configMap:
+                name: update-codeartifact-secret
+                defaultMode: 0755
