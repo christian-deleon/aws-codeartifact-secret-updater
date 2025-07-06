@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ $.Release.Name }}
   namespace: {{ . }}
 rules:
   - apiGroups: [""]
@@ -17,14 +17,14 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ $.Release.Name }}
   namespace: {{ . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ .Release.Name }}
+    name: {{ $.Release.Name }}
     namespace: {{ $.Values.namespace }}
 roleRef:
   kind: Role
-  name: {{ .Release.Name }}
+  name: {{ $.Release.Name }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
