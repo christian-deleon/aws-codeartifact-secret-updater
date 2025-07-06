@@ -17,7 +17,7 @@ data:
         --output text
     )
 
-    NAMESPACES=({{ join " " .Values.namespaces }})
+    NAMESPACES={{ join " " .Values.namespaces }}
 
     for ns in $NAMESPACES; do
       echo "Updating secret in namespace: $ns"
