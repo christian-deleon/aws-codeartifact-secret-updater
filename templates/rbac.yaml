@@ -1,0 +1,27 @@
+{{- range .Values.namespaces }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: codeartifact-secret-manager
+  namespace: {{ . }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "create", "update", "patch"]
+    resourceNames: ["{{ .Values.secretName }}"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: codeartifact-secret-manager-binding
+  namespace: {{ . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Values.serviceAccount.name }}
+    namespace: {{ .Values.namespace }}
+roleRef:
+  kind: Role
+  name: codeartifact-secret-manager
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

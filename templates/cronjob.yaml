@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: aws-codeartifact-secret-updater
+spec:
+  schedule: {{ .Values.cronJob.schedule | quote }}
+  ttlSecondsAfterFinished: {{ .Values.cronJob.ttlSecondsAfterFinished }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.serviceAccount.name }}
+          restartPolicy: OnFailure
+          containers:
+            - name: aws-codeartifact-secret-updater
+              image: {{ .Values.cronJob.image.repository }}:{{ .Values.cronJob.image.tag }}
+              command: ["/bin/sh", "/app/update-codeartifact-secret.sh"]
+              {{- if and .Values.aws.accessKeyId .Values.aws.secretAccessKey }}
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-credentials
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: aws-credentials
+                      key: AWS_SECRET_ACCESS_KEY
+              {{- end }}

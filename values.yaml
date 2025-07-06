@@ -1,0 +1,42 @@
+# Namespace where the chart is deployed (separate from target namespaces)
+namespace: aws-codeartifact-secret-updater
+
+# AWS configuration
+aws:
+  # AWS region for ECR
+  region: "us-east-1"
+  # AWS account ID
+  accountId: "123456789012"
+  # AWS access key ID
+  accessKeyId: ""
+  # AWS secret access key
+  secretAccessKey: ""
+
+# CodeArtifact configuration
+codeartifact:
+  # CodeArtifact domain
+  domain: "my-domain"
+
+# Target namespaces to manage secrets in
+namespaces:
+  - default
+
+# CronJob configuration
+cronJob:
+  # Run every 12 hours
+  schedule: "0 */12 * * *"
+  # TTL for the CronJob
+  ttlSecondsAfterFinished: 600
+  image:
+    # GitHub Container Registry
+    repository: "ghcr.io/christian-deleon/awscli-kubectl"
+    # Default tag
+    tag: "0.1.0"
+
+# Service account configuration
+serviceAccount:
+  # Name of the new service account
+  name: "aws-codeartifact-secret-updater"
+
+# Name of the secret to create/update
+secretName: "aws-codeartifact-secret"
