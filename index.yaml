@@ -2,11 +2,11 @@ apiVersion: v1
 entries:
   aws-codeartifact-secret-updater:
   - apiVersion: v2
-    created: "2025-07-06T19:30:11.010411026Z"
+    created: "2025-07-06T19:31:54.96876987Z"
     description: A Helm chart to automate CodeArtifact secrets across multiple namespaces
-    digest: a5e558a6fcf2ae99f358f5796727e61430b856a8cdea7578ecbde98e1c157120
+    digest: 1122362fd96ba318f81f8b3e0f2ed9b4b5ec3a0d2c38cf17f9e67144a985a408
     name: aws-codeartifact-secret-updater
     urls:
-    - https://christian-deleon.github.io/aws-codeartifact-secret-updater/aws-codeartifact-secret-updater-0.5.1.tgz
-    version: 0.5.1
-generated: "2025-07-06T19:30:11.009588446Z"
+    - https://christian-deleon.github.io/aws-codeartifact-secret-updater/aws-codeartifact-secret-updater-0.5.2.tgz
+    version: 0.5.2
+generated: "2025-07-06T19:31:54.967922964Z"
