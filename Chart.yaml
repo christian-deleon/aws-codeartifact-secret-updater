@@ -1,4 +1,4 @@
 apiVersion: v2
 name: aws-codeartifact-secret-updater
 description: A Helm chart to automate CodeArtifact secrets across multiple namespaces
-version: 0.6.0
+version: 0.7.0

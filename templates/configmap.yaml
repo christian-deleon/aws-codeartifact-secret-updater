@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ $.Release.Name }}-script
+  name: {{ .Release.Name }}-script
 data:
   update-codeartifact-secret.sh: |
     #!/bin/sh -e
