@@ -27,5 +27,9 @@ data:
         --from-literal=CODEARTIFACT_TOKEN=$TOKEN \
         --dry-run=client -o yaml | kubectl apply -f - -n $ns
 
-      echo "Secret updated in namespace: $ns"
+      if [ $? -eq 0 ]; then
+        echo "Secret updated in namespace: $ns"
+      else
+        echo "Failed to update secret in namespace: $ns"
+      fi
     done
