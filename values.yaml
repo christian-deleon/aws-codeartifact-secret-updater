@@ -20,7 +20,7 @@ codeartifact:
   domain:
 
 # Target namespaces to manage secrets in
-targeNamespaces: []
+targetNamespaces: []
 
 # CronJob configuration
 cronJob:
