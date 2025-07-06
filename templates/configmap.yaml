@@ -8,7 +8,7 @@ data:
 
     echo "Getting authorization token for CodeArtifact"
 
-    NAMESPACES={{ join " " (required "targeNamespaces is required" .Values.targeNamespaces) }}
+    NAMESPACES={{ join " " .Values.targeNamespaces }}
 
     if [ -z "$NAMESPACES" ]; then
       echo "No namespaces provided"
