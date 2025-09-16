@@ -26,6 +26,7 @@ codeartifact:
   domain:
 
 # Target namespaces to manage secrets in
+# Example: ["tekton-pipelines", "default", "production"]
 targetNamespaces: []
 
 # CronJob configuration

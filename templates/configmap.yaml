@@ -8,21 +8,46 @@ data:
 
     echo "Getting authorization token for CodeArtifact"
 
-    NAMESPACES={{ join " " .Values.targetNamespaces }}
+    {{- if .Values.targetNamespaces }}
+    NAMESPACES="{{ join " " .Values.targetNamespaces }}"
+    {{- else }}
+    NAMESPACES=""
+    {{- end }}
+    echo "Target namespaces: '$NAMESPACES'"
 
-    if [ -z "$NAMESPACES" ]; then
-      echo "No namespaces provided"
+    if [ -z "$NAMESPACES" ] || [ "$NAMESPACES" = "" ]; then
+      echo "ERROR: No target namespaces provided. Please configure targetNamespaces in values.yaml"
       exit 1
     fi
 
-    TOKEN=$(
+    # Get the authorization token and capture both stdout and stderr
+    TOKEN_OUTPUT=$(
       aws codeartifact get-authorization-token \
         --domain {{ required "codeartifact.domain is required" .Values.codeartifact.domain }} \
         --domain-owner {{ required "aws.accountId is required" .Values.aws.accountId }} \
         --region {{ required "aws.region is required" .Values.aws.region }} \
         --query authorizationToken \
-        --output text
+        --output text 2>&1
     )
+
+    # Check if the command failed
+    if [ $? -ne 0 ]; then
+      echo "ERROR: Failed to get CodeArtifact authorization token"
+      echo "AWS CLI output: $TOKEN_OUTPUT"
+      exit 1
+    fi
+
+    # Extract the token from the output
+    TOKEN=$(echo "$TOKEN_OUTPUT" | tail -n 1)
+
+    # Validate that we got a non-empty token
+    if [ -z "$TOKEN" ] || [ "$TOKEN" = "None" ]; then
+      echo "ERROR: No authorization token received from CodeArtifact"
+      echo "AWS CLI output: $TOKEN_OUTPUT"
+      exit 1
+    fi
+
+    echo "Successfully obtained CodeArtifact authorization token"
 
     for ns in $NAMESPACES; do
       echo "Updating secret in namespace: $ns"
@@ -36,5 +61,6 @@ data:
         echo "Secret updated in namespace: $ns"
       else
         echo "Failed to update secret in namespace: $ns"
+        exit 1
       fi
     done
